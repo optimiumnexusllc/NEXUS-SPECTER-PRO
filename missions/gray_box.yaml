@@ -1,0 +1,121 @@
+# NEXUS SPECTER PRO — Gray Box Mission Template
+# by OPTIMIUM NEXUS LLC | contact@optimiumnexus.com
+mission:
+  name: "Gray Box Assessment"
+  codename: "SPECTER_GRAY"
+  mode: gray_box
+  description: >
+    Authenticated penetration test with partial knowledge.
+    Client provides: credentials (low-priv user), network diagram, app stack info.
+    Goal: authenticated attack surface + privilege escalation paths.
+
+credentials:
+  web_user:     ""          # Low-privilege web app user
+  web_password: ""          # Password
+  ad_user:      ""          # Domain user (optional)
+  ad_password:  ""          # Domain password (optional)
+  ssh_user:     ""          # SSH user (optional)
+  ssh_key:      ""          # SSH key path (optional)
+  api_token:    ""          # API Bearer token (optional)
+
+target_info:
+  domain:       ""          # Internal domain (e.g., corp.local)
+  dc_ip:        ""          # Domain Controller IP
+  web_urls:     []          # List of target web URLs
+  internal_subnets: []      # Internal network CIDRs
+
+phases:
+  recon:
+    enabled: true
+    passive:
+      osint: true
+      dns: true
+      email_harvest: true
+      breach_lookup: true
+      github_dork: true
+      google_dork: true
+    active:
+      subdomain_enum: true
+      port_scan: true
+      tech_detect: true
+      cloud_recon: true
+
+  enumeration:
+    enabled: true
+    web:
+      dir_fuzz: true
+      vhost: true
+      params: true
+      api: true
+      js_analysis: true
+      authenticated_crawl: true  # Uses provided credentials
+      idor_check: true
+      broken_access_control: true
+    network:
+      smb: true
+      ldap: true
+      snmp: true
+      rdp: true
+      ad_enum: true       # Active Directory enumeration with creds
+    cloud:
+      aws: true
+      azure: true
+      gcp: true
+
+  vuln_scan:
+    enabled: true
+    authenticated: true   # Authenticated scans using provided credentials
+    nuclei: true
+    nikto: true
+    zap_authenticated: true
+    ssl_scan: true
+    cms_scan: true
+    sqli_scan: true
+    idor_scan: true
+    broken_auth: true
+    business_logic: true
+    cve_match: true
+
+  exploitation:
+    enabled: true
+    web: true
+    network: true
+    credentials: true
+    privilege_escalation: true
+    auto_exploit: false
+
+  post_exploitation:
+    enabled: true
+    privesc: true
+    lateral_movement: true
+    ad_attacks:
+      kerberoasting: true
+      asreproasting: true
+      pass_the_hash: true
+      pass_the_ticket: true
+    persistence: false
+    exfil_sim: true
+
+  reporting:
+    enabled: true
+    format: both
+    executive: true
+    technical: true
+    remediation: true
+    compare_blackbox: false
+    ai_narrative: true
+
+scan_config:
+  threads: 40
+  timeout: 300
+  rate_limit: 80
+  stealth_mode: false
+  authenticated: true
+
+ai_config:
+  enabled: true
+  attack_planning: true
+  payload_generation: true
+  ad_path_analysis: true
+  report_writing: true
+  model: claude-opus-4-5

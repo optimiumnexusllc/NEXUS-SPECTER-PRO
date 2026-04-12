@@ -1,0 +1,136 @@
+# NEXUS SPECTER PRO — White Box Mission Template
+# by OPTIMIUM NEXUS LLC | contact@optimiumnexus.com
+mission:
+  name: "White Box Assessment"
+  codename: "SPECTER_WHITE"
+  mode: white_box
+  description: >
+    Full-knowledge penetration test. Client provides: source code, architecture,
+    admin credentials, network diagrams, cloud console access.
+    Goal: deepest possible assessment — code review, logic flaws, infra audit.
+
+credentials:
+  admin_user:     ""
+  admin_password: ""
+  db_host:        ""
+  db_user:        ""
+  db_password:    ""
+  cloud_profile:  "default"
+  ssh_keys:       []
+  api_keys:       {}
+
+architecture:
+  stack:          []         # e.g. ["Django", "PostgreSQL", "Redis", "Nginx"]
+  source_path:    ""         # Path to source code (if available)
+  infra_diagram:  ""         # Path to infrastructure diagram
+  cloud_provider: ""         # aws | azure | gcp
+  internal_cidr:  []
+
+phases:
+  recon:
+    enabled: true
+    passive:
+      osint: true
+      dns: true
+      email_harvest: true
+      breach_lookup: true
+      github_dork: true
+    active:
+      subdomain_enum: true
+      port_scan: true
+      tech_detect: true
+      cloud_recon: true
+
+  code_review:
+    enabled: true
+    static_analysis: true    # SAST tools
+    dependency_check: true   # SCA — known vulnerable dependencies
+    secrets_scan: true       # TruffleHog, Gitleaks on source code
+    logic_review: true       # Manual logic flaw identification
+    tools:
+      - semgrep
+      - bandit
+      - safety
+      - trivy
+      - gitleaks
+
+  enumeration:
+    enabled: true
+    web: true
+    network: true
+    cloud: true
+    active_directory: true
+    internal_services: true
+    database_enum: true
+
+  vuln_scan:
+    enabled: true
+    authenticated: true
+    deep_scan: true
+    nuclei: true
+    nikto: true
+    zap: true
+    ssl_scan: true
+    cms_scan: true
+    injection_scan: true
+    cve_match: true
+    custom_checks: true
+
+  exploitation:
+    enabled: true
+    web: true
+    network: true
+    credentials: true
+    privilege_escalation: true
+    cloud_exploitation: true
+    auto_exploit: false
+
+  post_exploitation:
+    enabled: true
+    privesc: true
+    lateral_movement: true
+    ad_attacks:
+      kerberoasting: true
+      asreproasting: true
+      dcsync: true
+      golden_ticket_sim: false   # Requires explicit client approval
+    persistence: true
+    exfil_sim: true
+
+  cloud_audit:
+    enabled: true
+    iam_review: true
+    s3_permissions: true
+    network_security_groups: true
+    encryption_audit: true
+    logging_audit: true
+    compliance_check: true      # CIS benchmarks
+
+  reporting:
+    enabled: true
+    format: both
+    executive: true
+    technical: true
+    code_review_report: true
+    cloud_audit_report: true
+    remediation: true
+    risk_matrix: true
+    ai_narrative: true
+
+scan_config:
+  threads: 60
+  timeout: 600
+  rate_limit: 150
+  stealth_mode: false
+  authenticated: true
+  deep_mode: true
+
+ai_config:
+  enabled: true
+  attack_planning: true
+  payload_generation: true
+  code_review_assist: true
+  cloud_analysis: true
+  ad_path_analysis: true
+  report_writing: true
+  model: claude-opus-4-5

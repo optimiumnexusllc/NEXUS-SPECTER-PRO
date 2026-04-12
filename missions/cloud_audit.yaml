@@ -1,0 +1,105 @@
+# NEXUS SPECTER PRO — Cloud Audit Mission Template
+# by OPTIMIUM NEXUS LLC | contact@optimiumnexus.com
+mission:
+  name: "Cloud Security Audit"
+  codename: "SPECTER_CLOUD"
+  mode: cloud_audit
+  description: >
+    Comprehensive cloud infrastructure security assessment.
+    Covers: IAM misconfigurations, exposed storage, network security,
+    encryption, logging, compliance (CIS, SOC2, GDPR), serverless security.
+
+cloud:
+  provider: "aws"          # aws | azure | gcp | multi
+  profile:  "default"      # AWS CLI profile / Azure subscription
+  region:   ""             # Cloud region to audit
+  account_id: ""           # AWS Account ID / Azure Subscription ID
+
+aws_services:
+  iam: true
+  s3: true
+  ec2: true
+  rds: true
+  lambda: true
+  api_gateway: true
+  cloudtrail: true
+  cloudwatch: true
+  vpc: true
+  security_groups: true
+  kms: true
+  secrets_manager: true
+  ssm: true
+  ecr: true
+  eks: true
+  elasticache: true
+  sqs: true
+  sns: true
+
+azure_services:
+  azure_ad: true
+  storage: true
+  virtual_machines: true
+  sql_databases: true
+  functions: true
+  api_management: true
+  monitor: true
+  key_vault: true
+  network_security_groups: true
+  kubernetes_service: true
+
+gcp_services:
+  iam: true
+  cloud_storage: true
+  compute: true
+  cloud_sql: true
+  cloud_functions: true
+  cloud_run: true
+  gke: true
+  cloud_kms: true
+
+audit_checks:
+  iam_misconfigs: true      # Overprivileged roles, unused accounts
+  public_storage: true      # Public S3/GCS/Azure blobs
+  encryption_at_rest: true  # Unencrypted databases, volumes
+  encryption_in_transit: true
+  network_exposure: true    # 0.0.0.0/0 security groups, open ports
+  logging_gaps: true        # CloudTrail/Activity log coverage
+  mfa_enforcement: true
+  root_account_usage: true
+  cross_account_access: true
+  serverless_security: true
+  container_security: true
+  secrets_in_env: true      # Secrets in Lambda env vars, EC2 userdata
+  imds_v2_enforcement: true # IMDSv2 required
+  compliance_cis: true      # CIS Benchmark checks
+
+tools:
+  - prowler               # AWS/Azure/GCP security assessment
+  - scoutsuite            # Cloud security assessment
+  - cloudsplaining        # IAM least privilege analysis
+  - pacu                  # AWS exploitation framework
+  - s3scanner             # S3 bucket public exposure
+  - enumerate-iam         # IAM permission enumeration
+  - trivy                 # Container/IaC scanning
+
+reporting:
+  enabled: true
+  format: both
+  executive: true
+  technical: true
+  compliance_mapping:
+    cis_aws: true
+    soc2: true
+    gdpr: false
+    hipaa: false
+    pci_dss: false
+  remediation: true
+  ai_narrative: true
+
+ai_config:
+  enabled: true
+  cloud_analysis: true
+  attack_path_analysis: true
+  iam_review: true
+  report_writing: true
+  model: claude-opus-4-5
