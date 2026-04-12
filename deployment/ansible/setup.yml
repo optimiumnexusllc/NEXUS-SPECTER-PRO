@@ -1,0 +1,103 @@
+---
+# NEXUS SPECTER PRO — Ansible Setup Playbook
+# Provisions a fresh Kali Linux / Ubuntu machine for NSP deployment
+# by OPTIMIUM NEXUS LLC | contact@optimiumnexus.com
+
+- name: NEXUS SPECTER PRO — System Setup
+  hosts: nsp_nodes
+  become: true
+  vars:
+    nsp_user:    nsp
+    nsp_dir:     /opt/nexus-specter-pro
+    nsp_version: "1.0.0-SPECTER"
+
+  tasks:
+
+    - name: "📦 Update APT cache"
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: "📦 Install system dependencies"
+      apt:
+        name:
+          - python3.12
+          - python3-pip
+          - python3-dev
+          - git
+          - curl
+          - wget
+          - nmap
+          - masscan
+          - nikto
+          - sqlmap
+          - hydra
+          - gobuster
+          - dnsutils
+          - whois
+          - netcat-openbsd
+          - libpq-dev
+          - docker.io
+          - docker-compose
+          - golang-go
+        state: present
+
+    - name: "👤 Create NSP service user"
+      user:
+        name:   "{{ nsp_user }}"
+        groups: docker
+        shell:  /bin/bash
+        create_home: yes
+
+    - name: "📁 Clone NEXUS SPECTER PRO"
+      git:
+        repo:    https://github.com/optimiumnexusllc/NEXUS-SPECTER-PRO.git
+        dest:    "{{ nsp_dir }}"
+        version: main
+        force:   yes
+
+    - name: "🐍 Install Python requirements"
+      pip:
+        requirements: "{{ nsp_dir }}/requirements.txt"
+        executable:   pip3
+
+    - name: "🔧 Install NSP package"
+      command: pip3 install -e "{{ nsp_dir }}"
+      args:
+        chdir: "{{ nsp_dir }}"
+
+    - name: "⚙️  Copy .env template"
+      copy:
+        src:  "{{ nsp_dir }}/.env.example"
+        dest: "{{ nsp_dir }}/.env"
+        remote_src: yes
+        force: no
+
+    - name: "🐳 Start Docker service"
+      service:
+        name:    docker
+        state:   started
+        enabled: yes
+
+    - name: "🚀 Deploy with docker-compose"
+      command: docker-compose up -d
+      args:
+        chdir: "{{ nsp_dir }}"
+
+    - name: "✅ Verify NSP health"
+      uri:
+        url:             http://localhost:8080/health
+        return_content:  yes
+        timeout:         30
+      register: health
+      retries:  5
+      delay:    10
+
+    - name: "📊 Print deployment summary"
+      debug:
+        msg:
+          - "✅ NEXUS SPECTER PRO v{{ nsp_version }} deployed!"
+          - "   Dashboard: http://{{ ansible_host }}:8080"
+          - "   Company:   OPTIMIUM NEXUS LLC"
+          - "   Contact:   contact@optimiumnexus.com"
+          - "   Health:    {{ health.json.status }}"

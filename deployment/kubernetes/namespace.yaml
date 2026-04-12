@@ -1,0 +1,10 @@
+# NEXUS SPECTER PRO — Kubernetes Namespace
+# by OPTIMIUM NEXUS LLC
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nexus-specter-pro
+  labels:
+    app.kubernetes.io/name:       nexus-specter-pro
+    app.kubernetes.io/managed-by: optimium-nexus-llc
+    app.kubernetes.io/version:    "1.0.0-SPECTER"

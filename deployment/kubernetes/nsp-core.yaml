@@ -1,0 +1,89 @@
+# NEXUS SPECTER PRO — Core Engine Deployment
+# by OPTIMIUM NEXUS LLC
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsp-core
+  namespace: nexus-specter-pro
+  labels:
+    app:     nsp-core
+    version: 1.0.0-SPECTER
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nsp-core
+  template:
+    metadata:
+      labels:
+        app:     nsp-core
+        version: 1.0.0-SPECTER
+    spec:
+      containers:
+        - name:  nsp-core
+          image: optimiumnexus/nexus-specter-pro:latest
+          imagePullPolicy: Always
+          command: ["python3", "nsp_cli.py", "--dashboard"]
+          ports:
+            - containerPort: 8080
+              name: dashboard
+          envFrom:
+            - configMapRef:
+                name: nsp-config
+            - secretRef:
+                name: nsp-secrets
+          volumeMounts:
+            - name:      nsp-reports
+              mountPath: /app/reports
+            - name:      nsp-config-vol
+              mountPath: /app/config
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu:    "500m"
+            limits:
+              memory: "4Gi"
+              cpu:    "2000m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds:       15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds:       10
+      volumes:
+        - name: nsp-reports
+          persistentVolumeClaim:
+            claimName: nsp-reports-pvc
+        - name: nsp-config-vol
+          configMap:
+            name: nsp-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nsp-core
+  namespace: nexus-specter-pro
+spec:
+  selector:
+    app: nsp-core
+  ports:
+    - name: dashboard
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nsp-reports-pvc
+  namespace: nexus-specter-pro
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 50Gi

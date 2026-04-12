@@ -82,3 +82,28 @@ All notable changes to NEXUS SPECTER PRO by OPTIMIUM NEXUS LLC.
 - Kubernetes manifests
 - Ansible setup playbook
 - GitHub Actions CI/CD
+
+## [1.1.0-SPECTER] — 2025-04-13
+
+### ⚡ Sprint 3 — Scanners, PrivEsc, Reporting & Infrastructure
+
+#### Vulnerability Scanning
+- `web_scanner.py` — Web orchestrator: Nikto + ZAP API + Nuclei (web tags), unified dedup
+- `nuclei_runner.py` — Full engine with template management, JSONL parser, rich severity table
+
+#### Post-Exploitation
+- `linux_privesc.py` — LinPEAS orchestration, SUID/sudo/cron/docker/capabilities checks, MITRE mapping
+- `windows_privesc.py` — WinPEAS + PrivescCheck, token privs, AlwaysInstallElevated, unquoted service paths
+- `impacket_suite.py` — Authorized secretsdump/lookupsid/rpcdump/wmiexec wrapper with output parsing
+
+#### Credential Attacks
+- `spray_attacker.py` — Lockout-safe spray (CME/Hydra/HTTP), configurable delay + jitter, dry-run mode
+
+#### Reporting
+- `report_generator_v2.py` — Technical report with PoC evidence, CVSS 3.1 breakdown,
+  MITRE ATT&CK mapping, remediation library, full HTML+PDF output
+
+#### Infrastructure
+- `deployment/kubernetes/` — Full K8s stack: namespace, configmap, secrets, postgres StatefulSet,
+  redis deployment, nsp-core deployment, ingress (TLS), HPA, deploy.sh script
+- `deployment/ansible/setup.yml` — Full Ansible provisioning playbook (Kali/Ubuntu)

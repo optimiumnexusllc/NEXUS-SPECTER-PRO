@@ -1,0 +1,39 @@
+# NEXUS SPECTER PRO — Ingress
+# by OPTIMIUM NEXUS LLC
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nsp-ingress
+  namespace: nexus-specter-pro
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target:      /
+    nginx.ingress.kubernetes.io/ssl-redirect:        "true"
+    nginx.ingress.kubernetes.io/proxy-body-size:     "100m"
+    cert-manager.io/cluster-issuer:                  "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/auth-type:           basic
+    nginx.ingress.kubernetes.io/auth-secret:         nsp-basic-auth
+    nginx.ingress.kubernetes.io/auth-realm:          "NEXUS SPECTER PRO — Authorized Access Only"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - nsp.yourdomain.com    # ← Replace with your domain
+      secretName: nsp-tls-secret
+  rules:
+    - host: nsp.yourdomain.com
+      http:
+        paths:
+          - path:     /
+            pathType: Prefix
+            backend:
+              service:
+                name: nsp-core
+                port:
+                  number: 8080
+          - path:     /api
+            pathType: Prefix
+            backend:
+              service:
+                name: nsp-core
+                port:
+                  number: 8080
