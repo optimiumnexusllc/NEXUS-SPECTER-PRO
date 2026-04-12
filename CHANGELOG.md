@@ -107,3 +107,34 @@ All notable changes to NEXUS SPECTER PRO by OPTIMIUM NEXUS LLC.
 - `deployment/kubernetes/` — Full K8s stack: namespace, configmap, secrets, postgres StatefulSet,
   redis deployment, nsp-core deployment, ingress (TLS), HPA, deploy.sh script
 - `deployment/ansible/setup.yml` — Full Ansible provisioning playbook (Kali/Ubuntu)
+
+## [1.2.0-SPECTER] — 2025-04-13
+
+### ⚡ Sprint 4 — Infrastructure, Quality & Compliance
+
+#### Reporting & Scoring
+- `cvss_scorer.py`        — Full CVSS 3.1 engine (Base + Temporal + Environmental), roundup, batch scoring
+- `remediation_advisor.py`— Prioritized roadmap: CIS Controls, NIST CSF, OWASP ASVS, ISO 27001 mapping
+
+#### Dashboard
+- `AppV2.jsx`             — Redesigned React dashboard: Donut chart, Bar chart, live polling,
+                           mission modal with mode selector, animated progress bars, dark theme
+
+#### Core Infrastructure
+- `session_manager.py`    — AES-256 encrypted sessions, audit trail, PostgreSQL-ready
+- `plugin_loader.py`      — Hot-load custom plugins per phase, template generator, registry table
+- `scope_validator.py`    — Legal scope enforcement: IP/CIDR + wildcard domain + URL extraction
+
+#### Enumeration
+- `api_enum.py`           — REST/GraphQL/gRPC discovery: OpenAPI spec, introspection, auth detection
+
+#### Vulnerability Scanning
+- `ssl_scanner.py`        — TLS analysis: deprecated protocols, cert expiry, HSTS, testssl.sh integration
+
+#### Documentation
+- `docs/ARCHITECTURE.md`  — Full system architecture: data flow, module map, deployment, compliance
+
+#### Build System
+- `pyproject.toml`        — PEP 621 modern packaging: Black, Ruff, mypy, pytest, coverage, pre-commit
+- `.pre-commit-config.yaml`— Git hooks: trailing whitespace, secrets detection, black, ruff, mypy
+- `tests/unit/`           — 24 unit tests: CVSSScorer, ScopeValidator, SessionManager
