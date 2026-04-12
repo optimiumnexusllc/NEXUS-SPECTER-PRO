@@ -1,0 +1,69 @@
+# ╔══════════════════════════════════════════════════════════════╗
+# ║  NEXUS SPECTER PRO — .gitignore                             ║
+# ╚══════════════════════════════════════════════════════════════╝
+
+# Secrets & sensitive files — NEVER commit these
+.env
+config/api_keys.yaml
+config/scope.yaml
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+id_rsa*
+
+# Reports (may contain sensitive client data)
+reports/
+*.pdf
+*.html
+
+# Logs
+logs/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Docker
+.docker/
+
+# Temporary scan files
+/tmp/nsp_*
+*.xml.bak
+
+# Database
+*.db
+*.sqlite3
+
+# Node (dashboard frontend)
+node_modules/
+dashboard/frontend/build/
+dashboard/frontend/dist/
+
+# Wordlists (too large for git)
+config/wordlists/*.txt

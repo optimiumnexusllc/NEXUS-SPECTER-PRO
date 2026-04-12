@@ -1,0 +1,34 @@
+# NEXUS SPECTER PRO — Scope Configuration
+# IMPORTANT: Only test systems listed here. Stay in scope!
+# by OPTIMIUM NEXUS LLC
+
+engagement:
+  client:       "CLIENT_NAME_HERE"
+  start_date:   "2025-01-01"
+  end_date:     "2025-01-31"
+  authorized_by: "CLIENT_AUTHORIZED_SIGNER"
+  reference:    "CONTRACT-REF-001"
+
+in_scope:
+  domains:
+    - "target.com"
+    - "*.target.com"
+    - "api.target.com"
+  ips:
+    - "192.168.1.0/24"
+    - "10.0.0.0/8"
+  urls:
+    - "https://app.target.com"
+    - "https://admin.target.com"
+
+out_of_scope:
+  domains:
+    - "partner.target.com"
+    - "thirdparty.com"
+  ips:
+    - "192.168.1.254"   # Production DB — excluded by client
+  actions:
+    - "denial_of_service"
+    - "data_destruction"
+    - "physical_access"
+    - "social_engineering"  # Remove if authorized

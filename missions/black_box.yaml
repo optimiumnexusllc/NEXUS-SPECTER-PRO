@@ -1,0 +1,84 @@
+# NEXUS SPECTER PRO — Black Box Mission Template
+# by OPTIMIUM NEXUS LLC
+mission:
+  name: "Black Box Assessment"
+  codename: "GHOST_RECON"
+  mode: black_box
+  description: "Full external black box penetration test — zero prior knowledge"
+
+phases:
+  recon:
+    enabled: true
+    passive:
+      osint: true
+      dns: true
+      email_harvest: true
+      breach_lookup: true
+      github_dork: true
+      google_dork: true
+      social_footprint: true
+    active:
+      subdomain_enum: true
+      port_scan: true
+      tech_detect: true
+      cloud_recon: true
+
+  enumeration:
+    enabled: true
+    web:
+      dir_fuzz: true
+      vhost: true
+      params: true
+      api: true
+      js_analysis: true
+    network:
+      smb: false       # Disabled in black box (no internal access)
+      ldap: false
+      snmp: true
+      rdp: true
+
+  vuln_scan:
+    enabled: true
+    nuclei: true
+    nikto: true
+    zap: true
+    ssl_scan: true
+    cms_scan: true
+    sqli_scan: true
+    cve_match: true
+
+  exploitation:
+    enabled: true
+    web: true
+    network: true
+    credentials: true
+    auto_exploit: false  # Manual validation required
+
+  post_exploitation:
+    enabled: true
+    privesc: true
+    lateral_movement: true
+    persistence: false   # Client approval required
+    exfil_sim: true
+
+  reporting:
+    enabled: true
+    format: both         # pdf + html
+    executive: true
+    technical: true
+    remediation: true
+    ai_narrative: true
+
+scan_config:
+  threads: 50
+  timeout: 300
+  rate_limit: 100
+  stealth_mode: false
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+
+ai_config:
+  enabled: true
+  attack_planning: true
+  payload_generation: true
+  report_writing: true
+  model: claude-opus-4-5

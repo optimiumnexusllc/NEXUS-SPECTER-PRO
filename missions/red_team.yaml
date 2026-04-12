@@ -1,0 +1,82 @@
+# NEXUS SPECTER PRO — Red Team Mission Template
+# by OPTIMIUM NEXUS LLC
+mission:
+  name: "Red Team Operation"
+  codename: "SPECTER_RED"
+  mode: red_team
+  description: "Full adversarial red team simulation with C2 integration"
+
+phases:
+  recon:
+    enabled: true
+    passive:
+      osint: true
+      dns: true
+      email_harvest: true
+      breach_lookup: true
+      github_dork: true
+      google_dork: true
+      social_footprint: true
+      linkedin_recon: true
+    active:
+      subdomain_enum: true
+      port_scan: true
+      tech_detect: true
+      cloud_recon: true
+
+  enumeration:
+    enabled: true
+    web: true
+    network: true
+    cloud: true
+    active_directory: true
+
+  vuln_scan:
+    enabled: true
+    full_scan: true
+
+  exploitation:
+    enabled: true
+    web: true
+    network: true
+    credentials: true
+    phishing_sim: true   # Phishing campaign simulation
+    auto_exploit: false
+
+  post_exploitation:
+    enabled: true
+    privesc: true
+    lateral_movement: true
+    persistence: true    # Full persistence testing
+    exfil_sim: true
+    c2_integration: true # Sliver/Havoc C2
+
+  reporting:
+    enabled: true
+    format: both
+    executive: true
+    technical: true
+    remediation: true
+    attack_timeline: true
+    ai_narrative: true
+
+c2_config:
+  framework: sliver       # sliver | havoc | cobalt_strike
+  profile: malleable      # C2 profile for evasion
+  sleep: 30
+  jitter: 20
+
+scan_config:
+  threads: 30
+  timeout: 600
+  stealth_mode: true      # Low and slow
+  rate_limit: 20
+  random_delays: true
+
+ai_config:
+  enabled: true
+  attack_planning: true
+  payload_generation: true
+  ad_path_analysis: true
+  report_writing: true
+  model: claude-opus-4-5

@@ -1,0 +1,172 @@
+# ╔══════════════════════════════════════════════════════════════╗
+# ║  NEXUS SPECTER PRO — Docker Compose Stack                   ║
+# ║  by OPTIMIUM NEXUS LLC | contact@optimiumnexus.com          ║
+# ╚══════════════════════════════════════════════════════════════╝
+
+version: "3.9"
+
+networks:
+  nsp_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  nsp_postgres_data:
+  nsp_redis_data:
+  nsp_reports:
+  nsp_logs:
+
+services:
+
+  # ─── Core NSP Engine ─────────────────────────────────────────
+  nsp_core:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nsp_core
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./config:/app/config:ro
+      - ./missions:/app/missions:ro
+      - nsp_reports:/app/reports
+      - nsp_logs:/app/logs
+    networks:
+      - nsp_network
+    depends_on:
+      - postgres
+      - redis
+    command: python nsp_cli.py --dashboard
+    labels:
+      - "com.optimiumnexus.service=nsp-core"
+      - "com.optimiumnexus.version=1.0.0-SPECTER"
+
+  # ─── Dashboard API (FastAPI) ──────────────────────────────────
+  nsp_dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nsp_dashboard
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "${NSP_DASHBOARD_PORT:-8080}:8080"
+    volumes:
+      - nsp_reports:/app/reports
+      - nsp_logs:/app/logs
+    networks:
+      - nsp_network
+    depends_on:
+      - postgres
+      - redis
+    command: uvicorn dashboard.backend.main:app --host 0.0.0.0 --port 8080 --reload
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ─── Celery Worker (Async tasks) ─────────────────────────────
+  nsp_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nsp_worker
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - nsp_reports:/app/reports
+      - nsp_logs:/app/logs
+    networks:
+      - nsp_network
+    depends_on:
+      - postgres
+      - redis
+    command: celery -A nsp.core.celery_app worker --loglevel=info --concurrency=4
+
+  # ─── Celery Beat (Scheduler) ──────────────────────────────────
+  nsp_scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nsp_scheduler
+    restart: unless-stopped
+    env_file: .env
+    networks:
+      - nsp_network
+    depends_on:
+      - redis
+    command: celery -A nsp.core.celery_app beat --loglevel=info
+
+  # ─── PostgreSQL Database ──────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: nsp_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       nexus_specter
+      POSTGRES_USER:     nsp
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nsp_specter_2025!}
+    volumes:
+      - nsp_postgres_data:/var/lib/postgresql/data
+    networks:
+      - nsp_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nsp -d nexus_specter"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Redis Cache & Queue ──────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: nsp_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-nsp_redis_2025!}
+    volumes:
+      - nsp_redis_data:/data
+    networks:
+      - nsp_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ─── Nuclei Scanner ──────────────────────────────────────────
+  nuclei:
+    image: projectdiscovery/nuclei:latest
+    container_name: nsp_nuclei
+    restart: "no"
+    volumes:
+      - nsp_reports:/reports
+    networks:
+      - nsp_network
+    entrypoint: ["nuclei", "-update-templates"]
+
+  # ─── OpenVAS Scanner ─────────────────────────────────────────
+  openvas:
+    image: greenbone/openvas-scanner:latest
+    container_name: nsp_openvas
+    restart: unless-stopped
+    environment:
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
+    networks:
+      - nsp_network
+    volumes:
+      - /tmp/nsp_openvas:/var/lib/openvas
+
+  # ─── Metasploit RPC ──────────────────────────────────────────
+  metasploit:
+    image: metasploitframework/metasploit-framework:latest
+    container_name: nsp_msf
+    restart: unless-stopped
+    networks:
+      - nsp_network
+    command: >
+      bash -c "msfrpcd -P ${MSF_PASSWORD:-nsp_msf_2025!}
+              -S -a 0.0.0.0 -p 55553"
+    environment:
+      MSF_PASSWORD: ${MSF_PASSWORD:-nsp_msf_2025!}
