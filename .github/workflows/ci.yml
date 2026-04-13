@@ -11,7 +11,7 @@ jobs:
     name: 🧪 Test Suite
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
@@ -27,7 +27,7 @@ jobs:
     name: 🔒 Security Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Run Bandit (Python security linter)
         run: |
           pip install bandit
@@ -42,7 +42,7 @@ jobs:
     name: 🐳 Docker Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build Docker image
         run: docker build -t nexus-specter-pro:test .
       - name: Test container
