@@ -82,7 +82,7 @@ full = [
     "pandas>=2.2.0",
     "matplotlib>=3.8.3",
     "selenium>=4.18.0",
-    "paramiko>=3.4.0",
+    "paramiko>=4.0.0",
 ]
 
 [project.urls]
