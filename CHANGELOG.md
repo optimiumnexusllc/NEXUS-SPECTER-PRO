@@ -199,3 +199,37 @@ All notable changes to NEXUS SPECTER PRO by OPTIMIUM NEXUS LLC.
 
 #### Tests
 - `tests/unit/test_intelligence.py` — 28 unit tests covering all 4 intelligence modules
+
+## [1.5.0-SPECTER] — 2025-04-13
+
+### 📊 Sprint 7 — Reporting++ & Advanced OSINT
+
+#### Reporting
+- `executive_dashboard.py`   — C-Level HTML dashboard: risk gauge SVG, severity bars,
+                               compliance posture, sparkline trend, top findings table
+- `risk_matrix_generator.py` — 5×5 risk matrix HTML: heatmap zones, dot-plotted findings,
+                               CVSS→coordinates mapping, interactive tooltip
+- `mitre_attack_mapper.py`   — Full ATT&CK Enterprise matrix inline HTML + Navigator JSON
+                               layer export; 14 tactics × technique coverage heatmap
+- `compliance_reporter.py`   — Gap analysis: ISO 27001:2022 · NIS2 · SOC 2 · PCI-DSS v4 · GDPR;
+                               per-control PASS/FAIL/PARTIAL with HTML report
+- `trend_analyzer.py`        — Scan delta: new/resolved findings, risk score evolution,
+                               sparkline data, persistent JSON store, HTML trend report
+
+#### OSINT / Passive Recon
+- `certificate_transparency.py` — crt.sh CT logs: expired certs, wildcards, shadow IT
+                                   detection, SAN extraction, subdomain discovery
+- `asn_mapper.py`               — ASN cartography: RIPE NCC API, all IPv4/IPv6 prefixes,
+                                   total IP count, org details, multi-ASN support
+- `favicon_hasher.py`           — Pure-Python MurmurHash3, Shodan favicon search,
+                                   shadow asset discovery, interesting host flagging
+
+#### Intelligence
+- `false_positive_filter.py`  — Heuristic FP scoring: template FP rates, evidence
+                                  confirmation, cross-tool validation, severity trust,
+                                  CONFIRMED→FALSE_POSITIVE 5-tier verdict
+- `attack_narrative.py`       — AI (Claude API) or template attack scenario: 5-section
+                                  narrative, HTML export, word count, source tracking
+
+#### Tests
+- `tests/unit/test_sprint7.py` — 55 unit tests covering all 10 Sprint 7 modules
