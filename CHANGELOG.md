@@ -171,3 +171,31 @@ All notable changes to NEXUS SPECTER PRO by OPTIMIUM NEXUS LLC.
 #### Build & DevOps
 - `Makefile`              — 35 targets: install, test, lint, docker, k8s, scan shortcuts
 - `requirements-dev.txt`  — Dedicated dev dependency file
+
+## [1.4.0-SPECTER] — 2025-04-13
+
+### 🧠 Sprint 6 — Intelligence & Correlation Engine
+
+#### Threat Intelligence
+- `threat_intel_engine.py` — Multi-source passive intel: Shodan + Censys + GreyNoise +
+  VirusTotal + AbuseIPDB + URLScan. Composite ThreatScore (0-100) with 5 severity levels.
+  24h JSON cache layer. Batch mode with ranked output.
+
+#### CVE Correlation
+- `cve_correlator.py`      — NVD API v2.0 + CISA KEV daily sync + GitHub PoC detection.
+  Weaponization score, remediation priority (IMMEDIATE/HIGH/MEDIUM/LOW),
+  banner auto-parsing for multi-product correlation. CISA KEV 24h local cache.
+
+#### Attack Graph
+- `attack_graph.py`        — NetworkX digraph: shortest attack paths, chokepoints,
+  blast radius. D3.js self-contained interactive HTML export (drag, zoom, tooltip).
+  Auto-builds from NSP mission session data. MITRE ATT&CK technique edge labels.
+
+#### IOC Tracking
+- `ioc_tracker.py`         — IOC type detection (IPv4/domain/hash/CVE/URL/email).
+  OTX AlienVault enrichment. MITRE ATT&CK TTP mapping (35 techniques in library).
+  Threat actor similarity scoring (APT28/29/41, Lazarus, FIN7).
+  ATT&CK Navigator JSON layer export (import at navigator.mitre.org).
+
+#### Tests
+- `tests/unit/test_intelligence.py` — 28 unit tests covering all 4 intelligence modules

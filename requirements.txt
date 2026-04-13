@@ -71,3 +71,11 @@ pytest>=8.0.2             # Testing framework
 pytest-asyncio>=0.23.5   # Async test support
 black>=24.2.0             # Code formatting
 mypy>=1.8.0               # Type checking
+
+# ─── Intelligence & Correlation (Sprint 6) ───────────────────────────────────
+networkx>=3.2.1           # Attack graph computation + path finding
+shodan>=1.31.0            # Shodan threat intelligence API
+censys>=2.2.9             # Censys certificate + host intelligence
+pymisp>=2.4.176           # MISP threat intelligence platform
+stix2>=3.0.1              # STIX/TAXII threat intel exchange format
+taxii2-client>=2.3.0      # TAXII server client (MITRE ATT&CK STIX feed)
