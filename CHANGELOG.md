@@ -138,3 +138,36 @@ All notable changes to NEXUS SPECTER PRO by OPTIMIUM NEXUS LLC.
 - `pyproject.toml`        — PEP 621 modern packaging: Black, Ruff, mypy, pytest, coverage, pre-commit
 - `.pre-commit-config.yaml`— Git hooks: trailing whitespace, secrets detection, black, ruff, mypy
 - `tests/unit/`           — 24 unit tests: CVSSScorer, ScopeValidator, SessionManager
+
+## [1.3.0-SPECTER] — 2025-04-13
+
+### ⚡ Sprint 5 — Full Platform Completion
+
+#### Core Intelligence
+- `target_profiler.py`    — Multi-dim profiling: DNS, GeoIP, CDN/WAF detect, tech stack, attack surface
+- `cloud_recon.py`        — S3/Azure Blob/GCS public bucket probe, subdomain takeover detection
+
+#### Recon
+- `email_harvester.py`    — theHarvester + Hunter.io API + SPF/DMARC/DKIM mail security checks
+
+#### Enumeration
+- `dir_fuzzer.py`         — ffuf→feroxbuster→gobuster auto-select, builtin wordlist fallback
+
+#### Dashboard Backend v2
+- `main_v2.py`            — WebSockets real-time events, JWT Bearer auth (python-jose),
+                           full CRUD: missions/targets/results/reports + /api/stats
+
+#### Async Workers
+- `celery_tasks.py`       — Full Celery task graph: 6-phase chain, retry, signals,
+                           beat scheduler (nuclei update, session cleanup, health check)
+
+#### Testing
+- `tests/integration/test_api.py` — 20 async integration tests covering full API surface
+
+#### Documentation
+- `docs/API_REFERENCE.md` — Complete REST + WebSocket API reference with SDK example
+- `CONTRIBUTING.md`       — Full contribution guide: branching, standards, plugin authoring, release
+
+#### Build & DevOps
+- `Makefile`              — 35 targets: install, test, lint, docker, k8s, scan shortcuts
+- `requirements-dev.txt`  — Dedicated dev dependency file
