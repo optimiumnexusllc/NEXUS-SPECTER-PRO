@@ -33,7 +33,7 @@ jobs:
           pip install bandit
           bandit -r nsp/ -f json -o bandit-report.json || true
       - name: Upload security report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bandit-report
           path: bandit-report.json
