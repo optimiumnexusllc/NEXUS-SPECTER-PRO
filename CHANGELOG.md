@@ -233,3 +233,38 @@ All notable changes to NEXUS SPECTER PRO by OPTIMIUM NEXUS LLC.
 
 #### Tests
 - `tests/unit/test_sprint7.py` — 55 unit tests covering all 10 Sprint 7 modules
+
+## [1.6.0-SPECTER] — 2025-04-13
+
+### ⚙️ Sprint 8 — Automation, Orchestration & DevSecOps
+
+#### Automation Engine
+- `mission_scheduler.py`  — APScheduler cron/interval scheduling; preset library
+                            (daily/weekly/monthly/continuous); conflict detection,
+                            persistent SQLite store, enable/disable/run-now API
+- `parallel_executor.py`  — Asyncio semaphore pool; configurable concurrency/rate/timeout;
+                            rich live progress bar; result aggregation + SARIF export
+- `asset_discovery.py`    — Continuous inventory: CT logs + DNS + Shodan + Cloud;
+                            MD5-keyed persistent inventory; new asset diff detection;
+                            auto-alerting on high-risk new assets
+- `change_detector.py`    — Finding fingerprinting; new/resolved/worsened/improved diff;
+                            risk regression detection; HTML change report export;
+                            snapshot store for longitudinal comparison
+- `alert_engine.py`       — Slack (attachments) + Teams (MessageCard) + SMTP HTML email
+                            + generic webhook; level filtering; structured mission alerts
+
+#### DevSecOps
+- `supply_chain_audit.py` — pip-audit + npm audit + govulncheck + OSV.dev batch API;
+                            multi-language SBOM (Python/Node/Go/Java/Ruby);
+                            SPDX-2.3 JSON export; deduplicated vuln list
+- `container_scanner.py`  — Trivy (primary) + Grype (fallback); OS + app + secrets
+                            + misconfigs; risk score; multi-image batch scanning
+- `iac_scanner.py`        — Checkov + tfsec + Hadolint; auto-detects Terraform/CF/K8s/
+                            Dockerfile/Ansible; deduplication; SARIF-compatible output
+- `secret_scanner.py`     — TruffleHog (git history) + Gitleaks + 18 built-in regex
+                            patterns; FP filtering; SARIF v2.1.0 for CI/CD integration
+- `cloud_posture.py`      — Prowler + ScoutSuite; CIS Benchmark; by-service breakdown;
+                            compliance score; mock results when tools unavailable
+
+#### Tests
+- `tests/unit/test_sprint8.py` — 70 unit tests for all 10 Sprint 8 modules

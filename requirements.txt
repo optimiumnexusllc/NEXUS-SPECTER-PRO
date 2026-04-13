@@ -79,3 +79,11 @@ censys>=2.2.9             # Censys certificate + host intelligence
 pymisp>=2.4.176           # MISP threat intelligence platform
 stix2>=3.0.1              # STIX/TAXII threat intel exchange format
 taxii2-client>=2.3.0      # TAXII server client (MITRE ATT&CK STIX feed)
+
+# ─── Automation & DevSecOps (Sprint 8) ───────────────────────────────────────
+apscheduler>=3.10.4       # Mission scheduling (cron/interval)
+sqlalchemy>=2.0.25        # APScheduler persistent job store
+pip-audit>=2.7.0          # Python dependency vulnerability scanner
+checkov>=3.2.0            # IaC security scanner (Terraform/K8s/CF)
+sarif-om>=1.0.4           # SARIF format for CI/CD integration
+osv-scanner>=1.7.0        # OSV.dev vulnerability database client
